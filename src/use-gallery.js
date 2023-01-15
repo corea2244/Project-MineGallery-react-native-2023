@@ -74,7 +74,6 @@ export const useGallery = () => {
   const selectAlbum = (album) => {
     setSelectedAlbum(album);
   };
-
   const deleteAlbum = (albumId) => {
     if (albumId === defaultAlbum.id) {
       Alert.alert("기본 앨범은 삭제할 수 없어요!");
@@ -90,21 +89,50 @@ export const useGallery = () => {
         onPress: () => {
           const newAlbums = albums.filter((album) => album.id !== albumId);
           setAlbums(newAlbums);
-          setSelectedAlbum(defaultAlbum.id);
+          setSelectedAlbum(defaultAlbum);
         },
       },
     ]);
   };
-
   const selectImage = (image) => {
     setSelectedImage(image);
   };
 
-  const resetAlbumTitle = () => setAlbumTitle("");
-
   const filteredImages = images.filter(
     (image) => image.albumId === selectedAlbum.id
   );
+
+  const moveToPreviousImage = () => {
+    if (!selectedImage) return;
+    const selectedImageIndex = filteredImages.findIndex(
+      (image) => image.id === selectedImage.id
+    );
+    const previousImageIdx = selectedImageIndex - 1;
+    if (previousImageIdx < 0) return;
+    // console.log('selectedImageIndex', selectedImageIndex);
+    // console.log('previousImageIdx', previousImageIdx);
+    const previousImage = filteredImages[previousImageIdx];
+    setSelectedImage(previousImage);
+  };
+  const moveToNextImage = () => {
+    if (!selectedImage) return;
+    const selectedImageIndex = filteredImages.findIndex(
+      (image) => image.id === selectedImage.id
+    );
+    const nextImageIdx = selectedImageIndex + 1;
+    if (nextImageIdx > filteredImages.length - 1 || nextImageIdx === -1) return;
+    // console.log('selectedImageIndex', selectedImageIndex);
+    // console.log('nextImageIdx', nextImageIdx);
+    const nextImage = filteredImages[nextImageIdx];
+    setSelectedImage(nextImage);
+  };
+
+  // const showPreviousArrow = filteredImages.findIndex(image => image.id === selectedImage?.id) !== 0;
+  // const showNextArrow = filteredImages.findIndex(image => image.id === selectedImage?.id) !== filteredImages.length - 1;
+  const showPreviousArrow = true;
+  const showNextArrow = true;
+
+  const resetAlbumTitle = () => setAlbumTitle("");
 
   const imagesWithAddButton = [
     ...filteredImages,
@@ -115,12 +143,11 @@ export const useGallery = () => {
   ];
 
   useEffect(() => {
-    console.log("1) images", images);
-  }, [images]);
-
-  useEffect(() => {
-    console.log("2) filteredImages", filteredImages);
-  }, [filteredImages]);
+    // console.log('1) images', images);
+    // const arr = [1, 2, 3];
+    // const index = arr.findIndex(item => item === 4);
+    // console.log('index', index);
+  }, []);
 
   return {
     imagesWithAddButton,
@@ -145,5 +172,9 @@ export const useGallery = () => {
     closeBigImgModal,
     selectImage,
     selectedImage,
+    moveToPreviousImage,
+    moveToNextImage,
+    showPreviousArrow,
+    showNextArrow,
   };
 };

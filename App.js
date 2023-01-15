@@ -41,11 +41,16 @@ export default function App() {
     closeBigImgModal,
     selectImage,
     selectedImage,
+    moveToPreviousImage,
+    moveToNextImage,
+    showPreviousArrow,
+    showNextArrow,
   } = useGallery();
 
   const onPressOpenGallery = () => {
     pickImage();
   };
+  const onLongPressImage = (iamgeId) => deleteImage(iamgeId);
   const onPressAddAlbum = () => {
     openTextInputModal();
   };
@@ -59,11 +64,8 @@ export default function App() {
     closeTextInputModal();
     resetAlbumTitle();
   };
-  const onPressTextModalBackdrop = () => {
+  const onPresTextInputModalBackdrop = () => {
     closeTextInputModal();
-  };
-  const onPressBigImgModalBackdrop = () => {
-    closeBigImgModal();
   };
   const onPressHeader = () => {
     if (isDropdownOpen) {
@@ -83,7 +85,16 @@ export default function App() {
     selectImage(image);
     openBigImgModal();
   };
-  const onLongPressImage = (iamgeId) => deleteImage(iamgeId);
+  const onPresBigImgModalBackdrop = () => {
+    closeBigImgModal();
+  };
+
+  const onPressLeftArrow = () => {
+    moveToPreviousImage();
+  };
+  const onPressRightArrow = () => {
+    moveToNextImage();
+  };
 
   const renderItem = ({ item: image, index }) => {
     const { id, uri } = image;
@@ -135,14 +146,18 @@ export default function App() {
         albumTitle={albumTitle}
         setAlbumTitle={setAlbumTitle}
         onSubmitEditing={onSubmitEditing}
-        onPressBackdrop={onPressTextModalBackdrop}
+        onPressBackdrop={onPresTextInputModalBackdrop}
       />
 
       {/* 이미지를 크게 보는 Modal */}
       <BigImgModal
         modalVisible={bigImgModalVisible}
-        onPressBackdrop={onPressBigImgModalBackdrop}
+        onPressBackdrop={onPresBigImgModalBackdrop}
         selectedImage={selectedImage}
+        onPressLeftArrow={onPressLeftArrow}
+        onPressRightArrow={onPressRightArrow}
+        showPreviousArrow={showPreviousArrow}
+        showNextArrow={showNextArrow}
       />
 
       {/* 이미지 리스트 */}
